@@ -21,10 +21,13 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
 
+import CKEditor from 'ckeditor4-vue'
+
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`
 Vue.use(VueAxios)
+Vue.use(CKEditor)
 // use pro-layout components
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-container', PageHeaderWrapper)

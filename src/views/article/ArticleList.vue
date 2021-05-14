@@ -30,8 +30,15 @@
           </a-row>
         </a-form>
 
-        <a-table :columns="columns" :data-source="dataColumn" :loading="loading" :row-key="record => record.stt" :bordered="true">
-          <template slot="stt" slot-scope="text, record, index">{{index + 1}}</template>
+        <a-table
+          :columns="columns"
+          :data-source="dataColumn"
+          :loading="loading"
+          :row-key="record => record.stt"
+          :bordered="true"
+          @change="handleTableChange"
+        >
+          <template slot="stt" slot-scope="text, record, index">{{(data.page - 1) * 10 + index + 1}}</template>
           <template slot="image" slot-scope="text, record">
             <img :src="record.image" style="max-width: 100px; max-height: 100px">
           </template>
@@ -131,6 +138,7 @@
     },
     methods: {
       init () {
+        this.data.page = 1
         this.queryParam.status = -1
         this.Search()
       },
@@ -155,6 +163,11 @@
           console.log('list: ', ress)
           this.dataColumn = ress.items
         })
+      },
+      handleTableChange (pagination) {
+        console.log('page: ', pagination)
+        this.data.page = pagination.current
+        this.$forceUpdate()
       },
       // --------------
       handleEdit (record) {},

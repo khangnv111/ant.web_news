@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 const api = {
   artList: '/article/cms/get',
+  artInsert: '/article/cms/insert-update',
   menuList: '/article/menu/get'
 }
 
@@ -20,5 +21,13 @@ export function getMenuList (parameter) {
     url: api.menuList,
     method: 'get',
     params: parameter
+  })
+}
+
+export function articleInsert (parameter) {
+  return request({
+    url: api.artInsert,
+    method: 'post',
+    data: parameter
   })
 }

@@ -1,16 +1,13 @@
 <template>
   <page-header-wrapper>
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-      <a-form @submit="handleSubmit" :form="form">
+      <a-form>
         <a-form-item
           label="Tiêu đề"
           :labelCol="{lg: {span: 4}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 12}, sm: {span: 17} }">
           <a-input
-            v-decorator="[
-              'title',
-              {rules: [{ required: true, message: 'Tiêu đề bài viết không được trống' }]}
-            ]"
+            v-model="data.title"
             name="name"
             placeholder="Nhập tiêu đề" />
         </a-form-item>
@@ -20,10 +17,7 @@
           :labelCol="{lg: {span: 4}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 7}, sm: {span: 17} }">
           <a-select
-            v-decorator="[
-              'menuID',
-              {rules: [{ required: true, message: 'Chưa lựa chọn chuyên mục' }]}
-            ]"
+            v-model="data.menuID"
           >
             <a-select-option
               v-for="item in menuList"
@@ -44,16 +38,12 @@
             :multiple="false"
             :showUploadList="false"
             accept="image/png, image/jpeg"
-            v-decorator="[
-              'fileImage',
-              {rules: [{ required: true, message: 'Chưa chọn ảnh avatar' }]}
-            ]"
             :before-upload="beforeUploadImage"
           >
             <a-button> <a-icon type="upload" /> Click to Upload </a-button>
           </a-upload>
-          <div v-if="data.imageUrl">
-            <img :src="data.imageUrl" style="max-height: 100px; max-width: 100px"/>
+          <div v-if="data.image">
+            <img :src="data.image" style="max-height: 100px; max-width: 100px"/>
           </div>
         </a-form-item>
         <a-form-item
@@ -63,10 +53,8 @@
           <a-textarea
             rows="4"
             placeholder="Nhập mô tả"
-            v-decorator="[
-              'description',
-              {rules: [{ required: true, message: 'Mô tả không được trống' }]}
-            ]" />
+            v-model="data.description"
+          />
         </a-form-item>
         <a-form-item
           label="Nội dung"
@@ -74,10 +62,7 @@
           :wrapperCol="{lg: {span: 15}, sm: {span: 17} }">
           <ckeditor
             :config="editorDetailConfig"
-            v-decorator="[
-              'detail',
-              {rules: [{ required: true, message: 'Nội dung không được trống' }]}
-            ]"
+            v-model="data.detail"
           ></ckeditor>
         </a-form-item>
         <a-form-item
@@ -86,9 +71,7 @@
           :wrapperCol="{lg: {span: 15}, sm: {span: 17} }">
           <ckeditor
             :config="editorBottomConfig"
-            v-decorator="[
-              'bottomDesc'
-            ]"
+            v-model="data.bottomDesc"
           ></ckeditor>
         </a-form-item>
         <a-form-item
@@ -98,11 +81,8 @@
           <a-date-picker
             show-time
             placeholder="Select Time"
-            v-decorator="[
-              'publishDate',
-              {rules: [{ required: true, message: 'Thời gian đăng không được trống' }]}
-            ]"
-            @change="onChange"
+            v-model="data.date"
+            @change="onChangeDate"
             style="width: 100%"/>
         </a-form-item>
 
@@ -111,10 +91,7 @@
           :labelCol="{lg: {span: 4}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 7}, sm: {span: 17} }">
           <a-input
-            v-decorator="[
-              'author',
-              {rules: [{ required: true, message: 'Tác giả không được trống' }]}
-            ]"
+            v-model="data.author"
             placeholder="Nhập tác giả"
           ></a-input>
         </a-form-item>
@@ -124,7 +101,7 @@
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
           style="text-align: center"
         >
-          <a-button htmlType="submit" type="primary">Lưu thông tin</a-button>
+          <a-button htmlType="submit" type="primary" @click="handleSubmit">Lưu thông tin</a-button>
         </a-form-item>
       </a-form>
     </a-card>
@@ -133,13 +110,13 @@
 
 <script>
   import { getBase64 } from '@/utils/util'
-  import { getMenuList } from '@/api/article'
+  import { getMenuList, articleInsert } from '@/api/article'
 
   export default {
     name: 'ArticleInsert',
     data () {
       return {
-        form: this.$form.createForm(this),
+        // form: this.$form.createForm(this),
         menuList: [],
         data: {},
         fileUpload: null,
@@ -199,23 +176,30 @@
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = () => {
-          this.data.imageUrl = reader.result
+          this.data.image = reader.result
           this.$forceUpdate()
         }
 
         return false
       },
       // --------------
-      onChange (value, dateString) {
+      onChangeDate (value, dateString) {
         console.log('Selected Time: ', value)
         console.log('Formatted Selected Time: ', dateString)
       },
       handleSubmit (e) {
         e.preventDefault()
-        this.form.validateFields((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values)
-          }
+        console.log('submit.......')
+        console.log('data: ', this.data)
+        // const formData = new FormData()
+        // for (var key in this.data) {
+        //   formData.append(key, this.data[key])
+        // }
+        this.data.fileName = this.fileUpload.name
+        articleInsert(this.data).then(ress => {
+            console.log('ress: ', ress)
+        }).catch(err => {
+          console.log('err...', err.message, ' ', err.response)
         })
       }
     }

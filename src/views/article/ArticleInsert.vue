@@ -191,13 +191,17 @@
         e.preventDefault()
         console.log('submit.......')
         console.log('data: ', this.data)
-        // const formData = new FormData()
-        // for (var key in this.data) {
-        //   formData.append(key, this.data[key])
-        // }
+
+        this.data.publishDate = this.data.date.format('YYYY-MM-DD HH:mm:ss')
+        const formData = new FormData()
+        for (var key in this.data) {
+          formData.append(key, this.data[key])
+        }
+        formData.append('fileUpload', this.fileUpload, this.fileUpload.name)
         this.data.fileName = this.fileUpload.name
-        articleInsert(this.data).then(ress => {
+        articleInsert(formData).then(ress => {
             console.log('ress: ', ress)
+            this.$message.success(ress)
         }).catch(err => {
           console.log('err...', err.message, ' ', err.response)
         })

@@ -37,11 +37,11 @@
 
       <a-form-item>
         <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{ $t('user.login.remember-me') }}</a-checkbox>
-        <!--        <router-link-->
-        <!--          :to="{ name: 'recover', params: { user: 'aaa'} }"-->
-        <!--          class="forge-password"-->
-        <!--          style="float: right;"-->
-        <!--        >{{ $t('user.login.forgot-password') }}</router-link>-->
+<!--                <router-link-->
+<!--                  :to="{ name: 'recover', params: { user: 'aaa'} }"-->
+<!--                  class="forge-password"-->
+<!--                  style="float: right;"-->
+<!--                >{{ $t('user.login.forgot-password') }}</router-link>-->
       </a-form-item>
 
       <a-form-item style="margin-top:24px">

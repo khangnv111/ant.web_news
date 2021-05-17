@@ -38,11 +38,11 @@
           :bordered="true"
           @change="handleTableChange"
         >
-          <template slot="stt" slot-scope="text, record, index">{{(data.page - 1) * 10 + index + 1}}</template>
+          <template slot="stt" slot-scope="text, record, index">{{ (data.page - 1) * 10 + index + 1 }}</template>
           <template slot="image" slot-scope="text, record">
             <img :src="record.image" style="max-width: 100px; max-height: 100px">
           </template>
-          <template slot="countView" slot-scope="text">{{ text | NumberFormat}}</template>
+          <template slot="countView" slot-scope="text">{{ text | NumberFormat }}</template>
           <span slot="status" slot-scope="text">
             <a-tag :color="text | statusColorFilter">{{ text | statusFilter }}</a-tag>
           </span>
@@ -50,6 +50,9 @@
             <a-button @click="handleEdit(record)">Sửa</a-button>
             <a-divider type="vertical" />
             <a-button type="danger" @click="handleDelete(record)">Delete</a-button>
+            <!--            <router-link-->
+            <!--              :to="{ name: 'articleInsert', params: { user: record.articleID } }"-->
+            <!--            >Edit </router-link>-->
           </span>
         </a-table>
       </div>
@@ -170,8 +173,18 @@
         this.$forceUpdate()
       },
       // --------------
-      handleEdit (record) {},
-      handleDelete (record) {}
+      handleEdit (record) {
+        this.$router.push({ path: '/article/insert-update', query: { id: record.articleID } })
+      },
+      handleDelete (record) {
+        this.$confirm({
+          title: 'Do you want to delete these items?',
+          content: 'When clicked the OK button, this dialog will be closed after 1 second',
+          onOk () {
+          },
+          onCancel () {}
+        })
+      }
     }
   }
 </script>

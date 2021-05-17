@@ -99,3 +99,11 @@ export function getBase64 (img, callback) {
   reader.addEventListener('load', () => callback(reader.result))
   reader.readAsDataURL(img)
 }
+
+export function getValueParamUrl (param) {
+  if (!param) { return null }
+  var urlStr = window.location.href
+  var url = new URL(urlStr)
+  var value = url.searchParams.get(param)
+  return value
+}

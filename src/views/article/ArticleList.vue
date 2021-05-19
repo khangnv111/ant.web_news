@@ -61,7 +61,7 @@
 </template>
 
 <script>
-  import { getArticleList } from '@/api/article'
+  import { getArticleList, articleDel } from '@/api/article'
 
   const columns = [
     {
@@ -177,12 +177,27 @@
         this.$router.push({ path: '/article/insert-update', query: { id: record.articleID } })
       },
       handleDelete (record) {
+        var _this = this
         this.$confirm({
-          title: 'Do you want to delete these items?',
-          content: 'When clicked the OK button, this dialog will be closed after 1 second',
+          title: 'Bạn có chắc thực hiện thao tác này?',
+          content: 'Click Ok để tiếp tục, click Cancel để bỏ',
           onOk () {
+            _this.confỉmDelete(record.articleID)
           },
           onCancel () {}
+        })
+      },
+      confỉmDelete (id) {
+        var dataQuery = {
+          status: 4,
+          articleID: id
+        }
+
+        articleDel(dataQuery).then(ress => {
+          this.$message.success(ress)
+          this.Search()
+        }).catch(err => {
+          this.$message.error(err)
         })
       }
     }

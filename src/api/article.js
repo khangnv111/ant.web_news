@@ -3,6 +3,7 @@ import request from '@/utils/request'
 const api = {
   artList: '/article/cms/get',
   artInsert: '/article/cms/insert-update',
+  artDel: '/article/cms/delete',
   menuList: '/article/menu/get'
 }
 
@@ -27,6 +28,13 @@ export function getMenuList (parameter) {
 export function articleInsert (parameter) {
   return request({
     url: api.artInsert,
+    method: 'post',
+    data: parameter
+  })
+}
+export function articleDel (parameter) {
+  return request({
+    url: api.artDel,
     method: 'post',
     data: parameter
   })

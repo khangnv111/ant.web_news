@@ -6,7 +6,7 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="Từ khóa">
-                <a-input v-model="queryParam.id" placeholder="Nhập từ khóa"/>
+                <a-input v-model="queryParam.title" placeholder="Nhập từ khóa"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -47,12 +47,12 @@
             <a-tag :color="text | statusColorFilter">{{ text | statusFilter }}</a-tag>
           </span>
           <span slot="action" slot-scope="text, record">
+            <a-button v-show="record.status != 2 && record.status != 4" type="primary" @click="handleChangeStatus(record, 2)">Duyệt</a-button>
+            <a-button v-show="record.status != 1 && record.status != 3 && record.status != 4" type="danger" ghost @click="handleChangeStatus(record, 3)">Hạ</a-button>
+            <a-divider type="vertical" />
             <a-button @click="handleEdit(record)">Sửa</a-button>
             <a-divider type="vertical" />
-            <a-button type="danger" @click="handleDelete(record)">Delete</a-button>
-            <!--            <router-link-->
-            <!--              :to="{ name: 'articleInsert', params: { user: record.articleID } }"-->
-            <!--            >Edit </router-link>-->
+            <a-button type="danger" @click="handleChangeStatus(record, 4)">Delete</a-button>
           </span>
         </a-table>
       </div>
@@ -153,7 +153,7 @@
         console.log(date, dateString)
         // console.log(this.queryParam.dateRange)
         this.queryParam.fromDate = dateString[0]
-        this.queryParam.toDate = dateString[1]
+        this.queryParam.toDate = dateString[1] + ' 23:59:59'
       },
       // --------------
       Search () {
@@ -176,20 +176,20 @@
       handleEdit (record) {
         this.$router.push({ path: '/article/insert-update', query: { id: record.articleID } })
       },
-      handleDelete (record) {
+      handleChangeStatus (record, status) {
         var _this = this
         this.$confirm({
           title: 'Bạn có chắc thực hiện thao tác này?',
           content: 'Click Ok để tiếp tục, click Cancel để bỏ',
           onOk () {
-            _this.confỉmDelete(record.articleID)
+            _this.confirmChangeStatus(record.articleID, status)
           },
           onCancel () {}
         })
       },
-      confỉmDelete (id) {
+      confirmChangeStatus (id, status) {
         var dataQuery = {
-          status: 4,
+          status: status,
           articleID: id
         }
 

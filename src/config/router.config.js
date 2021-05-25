@@ -15,68 +15,13 @@ export const asyncRouterMap = [
     meta: { title: 'menu.home' },
     redirect: '/article/list',
     children: [
-      // dashboard
-      // {
-      //   path: '/dashboard',
-      //   name: 'dashboard',
-      //   redirect: '/dashboard/workplace',
-      //   component: RouteView,
-      //   meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
-      //   children: [
-      //     {
-      //       path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
-      //       name: 'Analysis',
-      //       component: () => import('@/views/dashboard/Analysis'),
-      //       meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: ['dashboard'] }
-      //     },
-      //     // 外部链接
-      //     {
-      //       path: 'https://www.baidu.com/',
-      //       name: 'Monitor',
-      //       meta: { title: 'menu.dashboard.monitor', target: '_blank' }
-      //     },
-      //     {
-      //       path: '/dashboard/workplace',
-      //       name: 'Workplace',
-      //       component: () => import('@/views/dashboard/Workplace'),
-      //       meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard'] }
-      //     }
-      //   ]
-      // },
-      // forms
-      // {
-      //   path: '/form',
-      //   redirect: '/form/base-form',
-      //   component: RouteView,
-      //   meta: { title: 'menu.form', icon: 'form', permission: ['form'] },
-      //   children: [
-      //     {
-      //       path: '/form/base-form',
-      //       name: 'BaseForm',
-      //       component: () => import('@/views/form/basicForm'),
-      //       meta: { title: 'menu.form.basic-form', keepAlive: true, permission: ['form'] }
-      //     },
-      //     {
-      //       path: '/form/step-form',
-      //       name: 'StepForm',
-      //       component: () => import('@/views/form/stepForm/StepForm'),
-      //       meta: { title: 'menu.form.step-form', keepAlive: true, permission: ['form'] }
-      //     },
-      //     {
-      //       path: '/form/advanced-form',
-      //       name: 'AdvanceForm',
-      //       component: () => import('@/views/form/advancedForm/AdvancedForm'),
-      //       meta: { title: 'menu.form.advanced-form', keepAlive: true, permission: ['form'] }
-      //     }
-      //   ]
-      // },
-      // list
+      // article
       {
         path: '/article',
         name: 'article',
         component: RouteView,
         redirect: '/article/list',
-        meta: { title: 'Quản lý bài viết', icon: 'table' },
+        meta: { title: 'Quản lý bài viết', icon: 'file-text' },
         children: [
           {
             path: '/article/list',
@@ -89,6 +34,22 @@ export const asyncRouterMap = [
             name: 'articleInsert',
             component: () => import('@/views/article/ArticleInsert'),
             meta: { title: 'Thêm mới bài viết', keepAlive: true }
+          }
+        ]
+      },
+
+      {
+        path: '/advert',
+        name: 'advert',
+        component: RouteView,
+        redirect: '/advert/list',
+        meta: { title: 'Quản lý quảng cáo', icon: 'share-alt' },
+        children: [
+          {
+            path: '/advert/list',
+            name: 'advertList',
+            component: () => import('@/views/advert/AdvertList'),
+            meta: { title: 'Danh sách quảng cáo', keepAlive: true }
           }
         ]
       }

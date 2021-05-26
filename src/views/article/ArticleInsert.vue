@@ -231,7 +231,9 @@
           this.loading = false
           console.log('ress: ', ress)
           this.$message.success(ress)
-          this.$router.push({ name: 'articleList' })
+          this.data = {}
+          this.fileUpload = null
+          // this.$router.push({ name: 'articleList' })
         }).catch(err => {
           this.loading = false
           console.log('err...', err.message, ' ', err.response)

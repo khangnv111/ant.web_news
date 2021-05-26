@@ -25,9 +25,8 @@
               <a-form-item label="Trạng thái">
                 <a-select style="width: 100%" v-model="queryParam.status" @change="onChange">
                   <a-select-option :value="-1">Tất cả</a-select-option>
-                  <a-select-option :value="1">Chờ duyệt</a-select-option>
-                  <a-select-option :value="2">Đã duyệt</a-select-option>
-                  <a-select-option :value="3">Đã hạ</a-select-option>
+                  <a-select-option :value="0">Tạm dừng</a-select-option>
+                  <a-select-option :value="1">Hoạt động</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -68,7 +67,7 @@
 </template>
 
 <script>
-  import { getAdvertPostList } from '@/api/advert'
+  import { getAdvertPostList, getAdvertList } from '@/api/advert'
   const columns = [
     {
       title: '#',
@@ -140,7 +139,9 @@
       init () {
         this.queryParam.position = 0
         this.queryParam.type = 0
+        this.queryParam.status = -1
         this.loadAdPosition()
+        this.Search()
       },
       loadAdPosition () {
         getAdvertPostList().then(ress => {
@@ -156,7 +157,14 @@
         this.data.page = pagination.current
         this.$forceUpdate()
       },
-      Search () {}
+      Search () {
+        this.loading = true
+        getAdvertList(this.queryParam).then(ress => {
+          this.loading = false
+          console.log('list: ', ress)
+          this.dataColumn = ress.items
+        })
+      }
     }
   }
 </script>

@@ -50,6 +50,12 @@ export const asyncRouterMap = [
             name: 'advertList',
             component: () => import('@/views/advert/AdvertList'),
             meta: { title: 'Danh sách quảng cáo', keepAlive: true }
+          },
+          {
+            path: '/advert/insert-update',
+            name: 'advertInsert',
+            component: () => import('@/views/advert/AdvertInsert'),
+            meta: { title: 'Thêm mới quảng cáo', keepAlive: true }
           }
         ]
       }

@@ -19,7 +19,7 @@ export function getAdvertList (parameter) {
 export function insertAdvert (parameter) {
   return request({
     url: api.advertInsert,
-    method: 'get',
+    method: 'post',
     data: parameter
   })
 }

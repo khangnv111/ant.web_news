@@ -4,7 +4,7 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="5" :sm="24">
+            <a-col :md="7" :sm="24">
               <a-form-item label="Vị trí">
                 <a-select style="width: 100%" v-model="queryParam.position" @change="onChange">
                   <a-select-option :value="0">Tất cả</a-select-option>
@@ -12,7 +12,7 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="5" :sm="24">
+            <a-col :md="7" :sm="24">
               <a-form-item label="Loại quảng cáo">
                 <a-select style="width: 100%" v-model="queryParam.type" @change="onChange">
                   <a-select-option :value="0">Tất cả</a-select-option>
@@ -21,7 +21,7 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="5" :sm="24">
+            <a-col :md="7" :sm="24">
               <a-form-item label="Trạng thái">
                 <a-select style="width: 100%" v-model="queryParam.status" @change="onChange">
                   <a-select-option :value="-1">Tất cả</a-select-option>
@@ -45,17 +45,16 @@
           @change="handleTableChange"
         >
           <template slot="stt" slot-scope="text, record, index">{{ (data.page - 1) * 10 + index + 1 }}</template>
-          <template slot="image" slot-scope="text, record">
-            <img :src="record.image" style="max-width: 100px; max-height: 100px">
+          <template slot="type" slot-scope="text, record">
+            <a-tag :color="record.type == 1 ? 'red' : 'green'">
+              {{record.type == 1 ? 'Ảnh' : 'Script'}}
+            </a-tag>
           </template>
-          <template slot="countView" slot-scope="text">{{ text | NumberFormat }}</template>
-          <span slot="status" slot-scope="text">
-            <a-tag :color="text | statusColorFilter">{{ text | statusFilter }}</a-tag>
+          <template slot="position" slot-scope="text, record">{{ record.position | positionFilter(text, posAdv)}}</template>
+          <span slot="status" slot-scope="text, record">
+            <a-tag :color="record.status === 1 ? '#87d068' : 'red'">{{ record.status === 1 ? 'Hoạt động' : 'Hạ' }}</a-tag>
           </span>
           <span slot="action" slot-scope="text, record">
-            <a-button v-show="record.status != 2 && record.status != 4" type="primary" @click="handleChangeStatus(record, 2)">Duyệt</a-button>
-            <a-button v-show="record.status != 1 && record.status != 3 && record.status != 4" type="danger" ghost @click="handleChangeStatus(record, 3)">Hạ</a-button>
-            <a-divider type="vertical" />
             <a-button @click="handleEdit(record)">Sửa</a-button>
             <a-divider type="vertical" />
             <a-button type="danger" @click="handleChangeStatus(record, 4)">Delete</a-button>
@@ -81,7 +80,8 @@
     },
     {
       title: 'Loại',
-      dataIndex: 'type'
+      dataIndex: 'type',
+      scopedSlots: { customRender: 'type' }
     },
     {
       title: 'Vị trí',
@@ -98,29 +98,10 @@
       scopedSlots: { customRender: 'action' }
     }
   ]
-
-  const statusMap = {
-    1: {
-      text: 'Chờ duyệt',
-      status: 'processing',
-      color: 'blue'
-    },
-    2: {
-      status: 'success',
-      text: 'Đã duyệt',
-      color: '#87d068'
-    },
-    3: {
-      status: 'error',
-      text: 'Đã hạ',
-      color: 'red'
-    }
-  }
   export default {
     name: 'AdvertList',
     data () {
       return {
-        statusMap,
         data: {},
         queryParam: {
           page: 1,
@@ -133,7 +114,14 @@
       }
     },
     created () {
+      this.data.page = 1
       this.init()
+    },
+    filters: {
+      positionFilter (pos, posAdv) {
+        console.log('posAdv: ', posAdv, ' ', pos)
+        return ''
+      }
     },
     methods: {
       init () {
@@ -157,6 +145,8 @@
         this.data.page = pagination.current
         this.$forceUpdate()
       },
+      // -------------------
+      // -------------------
       Search () {
         this.loading = true
         getAdvertList(this.queryParam).then(ress => {

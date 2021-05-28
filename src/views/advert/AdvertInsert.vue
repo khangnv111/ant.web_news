@@ -31,7 +31,7 @@
               name="file"
               :multiple="false"
               :showUploadList="false"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/gif"
               :before-upload="beforeUploadImage"
             >
               <a-button> <a-icon type="upload" /> Click to Upload </a-button>
@@ -83,7 +83,8 @@
 </template>
 
 <script>
-  import { getAdvertPostList, insertAdvert } from '@/api/advert'
+  import { getAdvertPostList, insertAdvert, getAdverDetail } from '@/api/advert'
+  import { getValueParamUrl } from '@/utils/util'
   export default {
     name: 'AdvertInsert',
     data () {
@@ -106,6 +107,21 @@
       init () {
         this.data.type = 1
         this.loadAdPosition()
+        var id = getValueParamUrl('id')
+        if (id) {
+          this.loadDetail(id)
+        }
+      },
+      loadDetail (id) {
+        const queryDetail = {
+          id: id
+        }
+        this.loading = true
+        getAdverDetail(queryDetail).then(ress => {
+          this.loading = false
+          console.log('getAdverDetail: ', ress)
+          this.data = ress.items
+        })
       },
       loadAdPosition () {
         getAdvertPostList().then(ress => {
@@ -123,7 +139,7 @@
         if (!file) {
           return false
         }
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
         if (!isJpgOrPng) {
           this.$message.error('You can only upload JPG file!')
           return false
@@ -149,7 +165,7 @@
         console.log('submit.......', this.data)
         console.log('fileUpload: ', this.fileUpload)
 
-        if (!this.data.name || !this.data.position || !this.fileUpload) {
+        if (!this.data.name || !this.data.position || (!this.fileUpload && !this.data.id)) {
           this.$message.error('Cần điền đầy đủ thông tin', 3)
           return false
         }

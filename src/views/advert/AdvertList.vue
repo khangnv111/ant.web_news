@@ -50,14 +50,14 @@
               {{record.type == 1 ? 'Ảnh' : 'Script'}}
             </a-tag>
           </template>
-          <template slot="position" slot-scope="text, record">{{ record.position | positionFilter(text, posAdv)}}</template>
+          <template slot="position" slot-scope="text, record">{{ positionFilter(record.position)}}</template>
           <span slot="status" slot-scope="text, record">
             <a-tag :color="record.status === 1 ? '#87d068' : 'red'">{{ record.status === 1 ? 'Hoạt động' : 'Hạ' }}</a-tag>
           </span>
           <span slot="action" slot-scope="text, record">
             <a-button @click="handleEdit(record)">Sửa</a-button>
             <a-divider type="vertical" />
-            <a-button type="danger" @click="handleChangeStatus(record, 4)">Delete</a-button>
+            <a-button type="danger">Delete</a-button>
           </span>
         </a-table>
       </div>
@@ -118,10 +118,10 @@
       this.init()
     },
     filters: {
-      positionFilter (pos, posAdv) {
-        console.log('posAdv: ', posAdv, ' ', pos)
-        return ''
-      }
+      // positionFilter (pos, posAdv) {
+      //   console.log('posAdv: ', posAdv, ' ', pos)
+      //   return ''
+      // }
     },
     methods: {
       init () {
@@ -146,7 +146,18 @@
         this.$forceUpdate()
       },
       // -------------------
+      positionFilter (pos) {
+        var data = this.posAdv.find(item => item.id === pos)
+        // console.log('data: ', data, ' this.posAdv: ', this.posAdv)
+        if (data) {
+          return data.name
+        }
+        return false
+      },
       // -------------------
+      handleEdit (record) {
+        this.$router.push({ path: '/advert/insert-update', query: { id: record.id } })
+      },
       Search () {
         this.loading = true
         getAdvertList(this.queryParam).then(ress => {

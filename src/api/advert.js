@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 const api = {
   advertList: '/advert/get',
+  advertDetail: '/advert/detail',
   advertInsert: '/advert/cms/insert-update',
   adPosList: '/advert/pos/get-list'
 }
@@ -11,6 +12,14 @@ export default api
 export function getAdvertList (parameter) {
   return request({
     url: api.advertList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getAdverDetail (parameter) {
+  return request({
+    url: api.advertDetail,
     method: 'get',
     params: parameter
   })

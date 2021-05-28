@@ -40,7 +40,7 @@ const user = {
           storage.set(ACCESS_TOKEN, response.tokenKey, 6 * 60 * 60 * 1000)
           commit('SET_TOKEN', response.tokenKey)
 
-          commit('SET_NAME', { name: response.userName, welcome: welcome() })
+          commit('SET_NAME', { name: response.userName })
           commit('SET_AVATAR', 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png')
           resolve(response)
         }).catch(error => {

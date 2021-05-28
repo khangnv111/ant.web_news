@@ -57,7 +57,7 @@
           <span slot="action" slot-scope="text, record">
             <a-button @click="handleEdit(record)">Sửa</a-button>
             <a-divider type="vertical" />
-            <a-button type="danger">Delete</a-button>
+            <a-button type="danger" @click="handleDelete(record)">Delete</a-button>
           </span>
         </a-table>
       </div>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-  import { getAdvertPostList, getAdvertList } from '@/api/advert'
+  import { getAdvertPostList, getAdvertList, deleteAdvert } from '@/api/advert'
   const columns = [
     {
       title: '#',
@@ -155,6 +155,28 @@
         return false
       },
       // -------------------
+      handleDelete (record) {
+        var _this = this
+        this.$confirm({
+          title: 'Bạn có chắc thực hiện thao tác này?',
+          content: 'Click Ok để tiếp tục, click Cancel để bỏ',
+          onOk () {
+            _this.confirmDelete(record.articleID)
+          },
+          onCancel () {}
+        })
+      },
+      confirmDelete (id) {
+        var dataQuery = {
+          id: id
+        }
+        deleteAdvert(dataQuery).then(ress => {
+          this.$message.success(ress)
+          this.Search()
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
       handleEdit (record) {
         this.$router.push({ path: '/advert/insert-update', query: { id: record.id } })
       },

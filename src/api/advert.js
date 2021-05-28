@@ -4,6 +4,7 @@ const api = {
   advertList: '/advert/get',
   advertDetail: '/advert/detail',
   advertInsert: '/advert/cms/insert-update',
+  advertDelete: '/advert/cms/delete',
   adPosList: '/advert/pos/get-list'
 }
 
@@ -28,6 +29,14 @@ export function getAdverDetail (parameter) {
 export function insertAdvert (parameter) {
   return request({
     url: api.advertInsert,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function deleteAdvert (parameter) {
+  return request({
+    url: api.advertDelete,
     method: 'post',
     data: parameter
   })
